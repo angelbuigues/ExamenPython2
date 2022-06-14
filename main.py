@@ -13,8 +13,8 @@ def read_data(fichero1, fichero2):
                         diccionario[row[0]]={
                             'description':row2[3],
                             'id':row2[1],
-                            'lat':row[4],
-                            'lon':row[5],
+                            'lat':float(row[4]),
+                            'lon':float(row[5]),
                             'name':row2[2]}
 
     print("---Diccionario----")
@@ -22,18 +22,44 @@ def read_data(fichero1, fichero2):
     return diccionario
 
 def get_name_description(clave, diccionario):
-    try:
-
-        print("Name: ")
+    existe = False
+    
+    for element in diccionario:
+        if(element == clave):
+            existe = True
+    
+    if(existe):
+        print("Para la clave 1080: ")
+        print("------------------------")
         print(diccionario[clave]['name'])
-        print("Description: ")
         print(diccionario[clave]['description'])
+    else:
+        print("Para una clave que no existe: ")
+        print("------------------------")
+        print(str(err))
 
-    except IndexError as err:
-         print("se ha producido una excepción: "+str(err))
+def search_by_lon(lon_a_buscar,diccionario):
+    existe = False
+    id = -1
+    if(not isinstance(lon_a_buscar, float)):
+        raise ValueError("No es de tipo float")
+    else:
+        for element in diccionario:
+            if(diccionario[element]['lon'] == lon_a_buscar):
+                existe = True
+                id = element
     
+        if(existe):
+            print("Para la clave 728257.03: ")
+            print("------------------------")
+            print(diccionario[id]['name'])
+            print(diccionario[id]['description'])
+
+            return id
+        else:
+            raise ValueError("No se ha encontrado la clave")
     
-    
+
    
 
 if __name__ == "__main__":
@@ -41,10 +67,18 @@ if __name__ == "__main__":
     fichero2 = "stops.csv"
 
     diccionario = read_data(fichero1,fichero2)
-    get_name_description('1080', diccionario)
+    try:
+        #get_name_description('1080', diccionario)
+        #get_name_description('10800', diccionario)
 
+        lon = 725915.428
+        #id = search_by_lon("725915.428", diccionario)
+        id = search_by_lon(lon, diccionario)
+        
 
-
+        print("Id encontrada: "+id)
+    except ValueError as err:
+        print("Se ha producido un error:"+str(err))
 
 
 
